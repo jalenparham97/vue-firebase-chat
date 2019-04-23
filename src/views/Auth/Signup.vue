@@ -28,7 +28,7 @@
       </b-form>
 
       <p class="mt-3">OR</p>
-      <b-button class="google-btn">SIGN UP WITH GOOGLE</b-button>
+      <b-button class="google-btn" @click="googleSignIn">SIGN UP WITH GOOGLE</b-button>
     </b-card>
   </div>
 </template>
@@ -46,6 +46,9 @@ export default {
   methods: {
     handleSubmit() {
       console.log(this.user);
+    },
+    googleSignIn() {
+      this.$store.dispatch("auth/googleAuth");
     }
   }
 };

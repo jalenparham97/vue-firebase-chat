@@ -9,6 +9,15 @@ const mutations = {
   setCurrentUser: (state, user) => (state.currentUser = user)
 }
 const actions = {
+  autoLogin({ commit }) {
+    firebase.auth().onAuthStateChanged(userData => {
+      console.log(userData)
+      const userRef = db.collection('users').doc(userData.uid)
+      userRef.get().then(user => {
+        commit('setCurrentUser', { ...user.data() })
+      })
+    })
+  },
   googleAuth({ commit }) {
     firebase
       .auth()
@@ -22,9 +31,21 @@ const actions = {
           db.collection('users')
             .doc(newUser.id)
             .set(newUser)
-            .then(() => router.push('/'))
+            .then(() => {
+              commit('setCurrentUser', newUser)
+              router.push('/')
+            })
+            .catch(err => console.log(err))
         } else {
-          router.push('/')
+          const userRef = db.collection('users').doc(user.user.uid)
+          userRef
+            .get()
+            .then(currentUser => {
+              console.log(currentUser.data())
+              commit('setCurrentUser', { ...currentUser.data() })
+              router.push('/')
+            })
+            .catch(err => console.log(err))
         }
       })
       .catch(error => {
