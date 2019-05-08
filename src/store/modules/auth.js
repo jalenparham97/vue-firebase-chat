@@ -11,7 +11,6 @@ const mutations = {
 const actions = {
   autoLogin({ commit }) {
     firebase.auth().onAuthStateChanged(userData => {
-      console.log(userData)
       const userRef = db.collection('users').doc(userData.uid)
       userRef.get().then(user => {
         commit('setCurrentUser', { ...user.data() })
@@ -26,14 +25,15 @@ const actions = {
         if (user.additionalUserInfo.isNewUser) {
           const newUser = {
             id: user.user.uid,
-            email: user.user.email
+            email: user.user.email,
+            displayName: user.user.displayName
           }
           db.collection('users')
             .doc(newUser.id)
             .set(newUser)
             .then(() => {
               commit('setCurrentUser', newUser)
-              router.push('/')
+              router.push('/new/workspace')
             })
             .catch(err => console.log(err))
         } else {
@@ -41,7 +41,6 @@ const actions = {
           userRef
             .get()
             .then(currentUser => {
-              console.log(currentUser.data())
               commit('setCurrentUser', { ...currentUser.data() })
               router.push('/')
             })
@@ -53,7 +52,9 @@ const actions = {
       })
   }
 }
-const getters = {}
+const getters = {
+  currentUser: state => state.currentUser
+}
 
 export default {
   namespaced: true,
