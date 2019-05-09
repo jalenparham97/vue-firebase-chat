@@ -32,7 +32,8 @@ export default {
       const workspace = {
         workspace: this.workspace,
         createdAt: getTime(new Date()),
-        creator: this.currentUser
+        creator: this.currentUser,
+        id: uuidv4()
       };
       this.addWorkspace(workspace);
     }

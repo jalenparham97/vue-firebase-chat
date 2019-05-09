@@ -3,17 +3,23 @@
     <div class="sidebar">
       <h1>{{ workspace }}</h1>
       <UserPanel/>
+      <Channels/>
     </div>
+    <Modal/>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import UserPanel from "./UserPanel.vue";
+import Channels from "./Channels.vue";
+import Modal from "./Modal.vue";
 
 export default {
   components: {
-    UserPanel
+    UserPanel,
+    Channels,
+    Modal
   },
   computed: {
     ...mapGetters("workspaces", ["currentWorkspace"]),
@@ -25,14 +31,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.sidebar-container {
-  height: 100vh;
-  display: flex;
-}
-
 .sidebar {
-  background: #eee;
   width: 240px;
+  height: 100vh;
+  background: #eee !important;
+  padding-left: 20px;
 }
 </style>
 

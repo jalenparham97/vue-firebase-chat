@@ -12,7 +12,8 @@ const actions = {
   addWorkspace({ commit }, newWorkspace) {
     const workspacesRef = db.collection('workspaces')
     workspacesRef
-      .add(newWorkspace)
+      .doc(newWorkspace.id)
+      .set(newWorkspace)
       .then(() => {
         commit('setCurrentWorkspace', newWorkspace)
         router.push(`/${newWorkspace.workspace}`)

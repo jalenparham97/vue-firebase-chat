@@ -1,11 +1,17 @@
 <template>
   <div class="chat">
-    <h1>Chat</h1>
+    <ChatHeader/>
   </div>
 </template>
 
 <script>
-export default {};
+import ChatHeader from "./ChatHeader.vue";
+
+export default {
+  components: {
+    ChatHeader
+  }
+};
 </script>
 
 <style lang="scss" scoped>
