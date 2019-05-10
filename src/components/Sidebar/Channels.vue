@@ -5,34 +5,42 @@
         <span>Channels</span>
         <sui-icon name="plus" @click="toggleModal" v-b-modal.modal-1/>
       </div>
-      <a v-for="channel in channels" :key="channel.id" is="sui-menu-item"># {{ channel.name }}</a>
+      <a
+        v-for="channel in channels"
+        :key="channel.id"
+        is="sui-menu-item"
+        @click="changeChannel(channel)"
+      ># {{ channel.name }}</a>
     </sui-menu>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import db from "../../db/db";
 
 export default {
   data: () => ({
     channels: [],
-    open: false
+    open: false,
+    firstLoad: true
   }),
   computed: {
     ...mapGetters("workspaces", ["currentWorkspace"])
   },
+  created() {},
   mounted() {
     this.addListeners();
   },
   methods: {
+    ...mapActions("channels", ["setChannel"]),
     toggleModal() {
       this.open = !this.open;
       this.$store.dispatch("toggleModal", this.open);
     },
     addListeners() {
       const channelsRef = db.collection(
-        `workspaces/${this.currentWorkspace.id}/channels`
+        `workspaces/${this.$route.params.id}/channels`
       );
       let loadedChannels = [];
       channelsRef.onSnapshot(snapShot => {
@@ -41,8 +49,21 @@ export default {
             loadedChannels.push(change.doc.data());
             this.channels = loadedChannels;
           }
+          this.setDefaultChannel();
         });
       });
+    },
+
+    changeChannel(channel) {
+      this.setChannel(channel);
+    },
+
+    setDefaultChannel() {
+      const defaultChannel = this.channels[0];
+      if (this.firstLoad && this.channels.length > 0) {
+        this.setChannel(defaultChannel);
+      }
+      this.firstLoad = false;
     }
   }
 };
@@ -59,7 +80,7 @@ export default {
 }
 
 .plus {
-  margin-right: 50px;
+  margin-right: 30px;
   cursor: pointer;
 }
 </style>

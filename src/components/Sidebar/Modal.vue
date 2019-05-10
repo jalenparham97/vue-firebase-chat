@@ -11,8 +11,8 @@
       </div>
     </form>
     <div slot="modal-footer">
-      <b-button class="float-right ml-3" @click="toggle">Close</b-button>
-      <b-button class="float-right" @click="addChannel">Add</b-button>
+      <sui-button class="float-right ml-3" @click="toggle">Close</sui-button>
+      <sui-button class="float-right" @click="addChannel">Add</sui-button>
     </div>
   </b-modal>
 </template>

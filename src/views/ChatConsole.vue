@@ -2,7 +2,7 @@
   <section class="chat-console">
     <div class="chat-container">
       <Sidebar></Sidebar>
-      <Chat></Chat>
+      <Chat class="chat"></Chat>
     </div>
   </section>
 </template>
@@ -21,7 +21,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.chat-console {
+  height: 100vh;
+}
+
 .chat-container {
   display: flex;
+  height: 100%;
+}
+
+.chat {
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 87%;
 }
 </style>

@@ -2,7 +2,7 @@ import router from '@/router'
 import db from '@/db/db'
 
 const state = {
-  currentWorkspace: {}
+  currentWorkspace: null
 }
 const mutations = {
   setCurrentWorkspace: (state, workspace) =>
@@ -16,9 +16,21 @@ const actions = {
       .set(newWorkspace)
       .then(() => {
         commit('setCurrentWorkspace', newWorkspace)
-        router.push(`/${newWorkspace.workspace}`)
+        router.push(`/${newWorkspace.id}`)
       })
       .catch(err => console.log(err))
+  },
+  loadWorkspace({ state, commit }, workspaceId) {
+    const workspaceRef = db
+      .collection('workspaces')
+      .where('id', '==', workspaceId)
+    if (!state.currentWorkspace) {
+      workspaceRef.get().then(snapShot => {
+        snapShot.docs.forEach(doc => {
+          commit('setCurrentWorkspace', doc.data())
+        })
+      })
+    }
   }
 }
 const getters = {

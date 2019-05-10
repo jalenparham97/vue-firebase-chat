@@ -32,7 +32,7 @@ export default new Router({
       component: Workspace
     },
     {
-      path: '/:workspace',
+      path: '/:id',
       name: 'ChatConsole',
       component: ChatConsole
     }
