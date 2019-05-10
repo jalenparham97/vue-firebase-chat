@@ -7,9 +7,6 @@
         <div>Today at 5:42PM</div>
       </sui-comment-metadata>
       <sui-comment-text>How artistic!</sui-comment-text>
-      <sui-comment-actions>
-        <sui-comment-action>Reply</sui-comment-action>
-      </sui-comment-actions>
     </sui-comment-content>
   </sui-comment>
 </template>
