@@ -24,6 +24,7 @@ import { getTime } from "date-fns";
 import uuidv4 from "uuid/v4";
 
 export default {
+  props: ["newChannel"],
   data: () => ({
     open: false,
     channel: {
@@ -53,7 +54,10 @@ export default {
         id: uuidv4()
       };
 
-      channelsRef.doc(channel.id).set(channel);
+      channelsRef
+        .doc(channel.id)
+        .set(channel)
+        .then(() => this.newChannel(channel));
       this.toggle();
     }
   }

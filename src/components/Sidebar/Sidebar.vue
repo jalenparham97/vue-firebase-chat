@@ -3,9 +3,9 @@
     <div class="sidebar">
       <h1>{{ workspace }}</h1>
       <UserPanel/>
-      <Channels/>
+      <Channels :channels="channels" :changeChannel="changeChannel"/>
     </div>
-    <Modal/>
+    <Modal :newChannel="newChannel"/>
   </div>
 </template>
 
@@ -21,6 +21,7 @@ export default {
     Channels,
     Modal
   },
+  props: ["channels", "changeChannel", "newChannel"],
   created() {
     const workspace = this.$route.params.id;
     this.loadWorkspace(workspace);

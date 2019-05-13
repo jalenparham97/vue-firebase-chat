@@ -6,24 +6,29 @@
         <input type="text" placeholder="Message" v-model="message">
       </div>
     </sui-form>
+    <sui-button class="mt-2" v-b-modal.modal-2>Upload Media</sui-button>
   </sui-segment>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import db from "../../db/db";
+import firebase from "../../db/firebase";
 import { getTime } from "date-fns";
+import uuidv4 from "uuid/v4";
 
 export default {
+  props: ["currentChannel"],
   data: () => ({
-    message: ""
+    message: "",
+    storageRef: firebase.storage().ref(),
+    uploadState: "",
+    uploadTask: null,
+    percentUploaded: 0,
+    loading: false
   }),
   computed: {
-    ...mapGetters("channels", ["currentChannel"]),
     ...mapGetters("auth", ["currentUser"]),
-    channelId() {
-      return this.currentChannel.id;
-    },
     workspaceId() {
       return this.$route.params.id;
     }
@@ -31,7 +36,9 @@ export default {
   methods: {
     addMessage() {
       const messagesRef = db.collection(
-        `workspaces/${this.workspaceId}/channels/${this.channelId}/messages`
+        `workspaces/${this.workspaceId}/channels/${
+          this.currentChannel.id
+        }/messages`
       );
       const message = {
         content: this.message,
@@ -41,10 +48,50 @@ export default {
       messagesRef
         .doc()
         .set(message)
-        .then(() => console.log(message))
+        .then(() => console.log("Message sent"))
         .catch(err => console.log(err));
       this.message = "";
-    }
+    },
+    handleFileUpload(file, metadata) {
+      const ref = db.collection(
+        `workspaces/${this.workspaceId}/channels/${
+          this.currentChannel.id
+        }/messages`
+      );
+      const filePath = `chat/public/${uuidv4()}.jpg`;
+
+      this.uploadState = "uploading";
+      this.uploadTask = this.storageRef.child(filePath).put(file, metadata);
+
+      this.uploadTask.on(
+        "state_changed",
+        snap => {
+          const percentUploaded = Math.round(
+            (snap.bytesTransferred / snap.totalBytes) * 100
+          );
+          this.percentUploaded = percentUploaded;
+        },
+        err => {
+          console.log(err);
+          (this.uploadState = "error"), (this.uploadTask = null);
+        },
+        () => {
+          console.log(this.uploadTask.snapshot.ref);
+          this.uploadTask.snapshot.ref
+            .getDownloadUrl()
+            .then(downloadUrl => {
+              console.log(downloadUrl);
+              this.sendFileMessage(downloadUrl, ref);
+            })
+            .catch(err => {
+              console.log(err);
+              this.uploadState = "error";
+              this.uploadTask = null;
+            });
+        }
+      );
+    },
+    sendFileMessage(fileUrl, ref) {}
   }
 };
 </script>

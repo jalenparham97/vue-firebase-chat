@@ -14,11 +14,8 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 export default {
-  computed: {
-    ...mapGetters("channels", ["currentChannel"])
-  }
+  props: ["currentChannel"]
 };
 </script>
 

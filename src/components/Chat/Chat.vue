@@ -1,74 +1,44 @@
 <template>
   <div class="chat">
-    <ChatHeader/>
+    <ChatHeader :currentChannel="currentChannel"/>
     <div class="messages">
       <sui-comment-group>
-        <h1>Comment</h1>
+        <Message v-for="message in messages" :key="message.id" :message="message"/>
       </sui-comment-group>
     </div>
-    <ChatForm/>
+    <ChatForm :currentChannel="currentChannel"/>
+    <FileModal/>
   </div>
 </template>
 
 <script>
 import ChatHeader from "./ChatHeader.vue";
 import ChatForm from "./ChatForm.vue";
+import Message from "./Message.vue";
+import FileModal from "./FileModal.vue";
 import { mapGetters } from "vuex";
 import db from "../../db/db";
 
 export default {
   components: {
     ChatHeader,
-    ChatForm
+    ChatForm,
+    Message,
+    FileModal
   },
-  data: () => ({
-    messages: []
-  }),
+  props: ["currentChannel", "messages", "addListeners"],
   computed: {
-    ...mapGetters("channels", ["currentChannel"]),
     ...mapGetters("workspaces", ["currentWorkspace"]),
     workspaceId() {
       return this.$route.params.id;
-    },
-    channelId() {
-      return this.currentChannel.id;
-    }
-  },
-  mounted() {
-    this.addListeners();
-  },
-  methods: {
-    addListeners() {
-      this.addMessageListeners();
-    },
-    addMessageListeners() {
-      const messagesRef = db
-        .collection(
-          `workspaces/${this.workspaceId}/channels/${this.channelId}/messages`
-        )
-        .orderBy("createdAt", "desc");
-      const loadedMessages = [];
-      messagesRef.onSnapshot(snapShot => {
-        snapShot.docChanges().forEach(change => {
-          if (change.type === "added") {
-            loadedMessages.push(change.doc.data());
-            this.messages = loadedMessages;
-          }
-        });
-        console.log(this.messages);
-      });
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-// .chat {
-//   display: flex;
-//   flex-direction: column;
-// }
 .messages {
-  height: 500px;
+  height: 75%;
   overflow-y: scroll;
 }
 </style>

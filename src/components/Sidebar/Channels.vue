@@ -20,50 +20,19 @@ import { mapGetters, mapActions } from "vuex";
 import db from "../../db/db";
 
 export default {
+  props: ["channels", "changeChannel"],
   data: () => ({
-    channels: [],
     open: false,
     firstLoad: true
   }),
   computed: {
     ...mapGetters("workspaces", ["currentWorkspace"])
   },
-  created() {},
-  mounted() {
-    this.addListeners();
-  },
   methods: {
     ...mapActions("channels", ["setChannel"]),
     toggleModal() {
       this.open = !this.open;
       this.$store.dispatch("toggleModal", this.open);
-    },
-    addListeners() {
-      const channelsRef = db.collection(
-        `workspaces/${this.$route.params.id}/channels`
-      );
-      let loadedChannels = [];
-      channelsRef.onSnapshot(snapShot => {
-        snapShot.docChanges().forEach(change => {
-          if (change.type === "added") {
-            loadedChannels.push(change.doc.data());
-            this.channels = loadedChannels;
-          }
-          this.setDefaultChannel();
-        });
-      });
-    },
-
-    changeChannel(channel) {
-      this.setChannel(channel);
-    },
-
-    setDefaultChannel() {
-      const defaultChannel = this.channels[0];
-      if (this.firstLoad && this.channels.length > 0) {
-        this.setChannel(defaultChannel);
-      }
-      this.firstLoad = false;
     }
   }
 };

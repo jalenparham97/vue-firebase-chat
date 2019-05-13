@@ -22,11 +22,13 @@ const actions = {
       .auth()
       .signInWithPopup(new firebase.auth.GoogleAuthProvider())
       .then(user => {
+        console.log(user)
         if (user.additionalUserInfo.isNewUser) {
           const newUser = {
             id: user.user.uid,
             email: user.user.email,
-            displayName: user.user.displayName
+            displayName: user.user.displayName,
+            avatar: user.user.photoURL
           }
           db.collection('users')
             .doc(newUser.id)
