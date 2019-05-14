@@ -1,6 +1,7 @@
 import firebase from '@/db/firebase'
 import router from '@/router'
 import db from '@/db/db'
+import { longStackSupport } from 'q'
 
 const state = {
   currentUser: {}
@@ -9,6 +10,15 @@ const mutations = {
   setCurrentUser: (state, user) => (state.currentUser = user)
 }
 const actions = {
+  logout({ commit }) {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        commit('setCurrentUser', {})
+        router.push('/signup')
+      })
+  },
   autoLogin({ commit }) {
     firebase.auth().onAuthStateChanged(userData => {
       const userRef = db.collection('users').doc(userData.uid)

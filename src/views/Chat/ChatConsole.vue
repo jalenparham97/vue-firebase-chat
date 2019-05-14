@@ -7,15 +7,17 @@
         :currentChannel="currentChannel"
         :messages="messages"
         :addListeners="addListeners"
+        :uniqueUsers="uniqueUsers"
       ></Chat>
     </div>
   </section>
 </template>
 
 <script>
-import Sidebar from "../components/Sidebar/Sidebar.vue";
-import Chat from "../components/Chat/Chat.vue";
-import db from "../db/db";
+import Sidebar from "../../components/Sidebar/Sidebar.vue";
+import Chat from "../../components/Chat/Chat.vue";
+import db from "../../db/db";
+import { mapGetters } from "vuex";
 
 export default {
   name: "ChatConsole",
@@ -23,10 +25,12 @@ export default {
     Sidebar,
     Chat
   },
+  props: ["currentUser"],
   data: () => ({
     messages: [],
     channels: [],
-    currentChannel: ""
+    currentChannel: "",
+    uniqueUsers: ""
   }),
   computed: {
     workspaceId() {
@@ -52,18 +56,7 @@ export default {
     });
   },
   mounted() {
-    const channelsRef = db.collection(
-      `workspaces/${this.workspaceId}/channels`
-    );
-    let defaultChannel;
-    channelsRef.get().then(snapShot => {
-      snapShot.docs.forEach(doc => {
-        this.channels.push(doc.data());
-      });
-      defaultChannel = this.channels[0];
-      this.currentChannel = defaultChannel;
-      this.addListeners();
-    });
+    this.getChannels();
   },
   methods: {
     changeChannel(channel) {
@@ -85,6 +78,7 @@ export default {
     },
     addListeners() {
       this.addMessageListeners();
+      this.addChannelsListeners();
     },
     addMessageListeners() {
       const messagesRef = db
@@ -100,12 +94,52 @@ export default {
           if (change.type === "added") {
             loadedMessages.push(change.doc.data());
             this.messages = loadedMessages;
+            this.countUniqueUsers(loadedMessages);
+          }
+        });
+      });
+    },
+    addChannelsListeners() {
+      const channelsRef = db.collection(
+        `workspaces/${this.workspaceId}/channels`
+      );
+      const channels = [];
+      channelsRef.onSnapshot(snapShot => {
+        snapShot.docChanges().forEach(change => {
+          if (change.type === "added") {
+            channels.push(change.doc.data());
+            this.channels = channels;
           }
         });
       });
     },
     newChannel(channel) {
       this.changeChannel(channel);
+    },
+    countUniqueUsers(messages) {
+      const uniqueUsers = messages.reduce((acc, message) => {
+        if (!acc.includes(message.user.displayName)) {
+          acc.push(message.user.displayName);
+        }
+        return acc;
+      }, []);
+      const plural = uniqueUsers.length > 1 || uniqueUsers.length === 0;
+      const numUniqueUsers = `${uniqueUsers.length} user${plural ? "s" : ""}`;
+      this.uniqueUsers = numUniqueUsers;
+    },
+    getChannels() {
+      const channelsRef = db.collection(
+        `workspaces/${this.workspaceId}/channels`
+      );
+      let defaultChannel;
+      channelsRef.get().then(snapShot => {
+        snapShot.docs.forEach(doc => {
+          this.channels.push(doc.data());
+        });
+        defaultChannel = this.channels[0];
+        this.currentChannel = defaultChannel;
+        this.addListeners();
+      });
     }
   }
 };

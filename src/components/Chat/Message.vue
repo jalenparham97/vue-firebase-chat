@@ -7,6 +7,13 @@
         <div>{{ date }}</div>
       </sui-comment-metadata>
       <sui-comment-text>{{ message.content }}</sui-comment-text>
+      <sui-image
+        class="mt-2"
+        v-if="containsImage(message)"
+        :src="message.image"
+        size="large"
+        rounded
+      />
     </sui-comment-content>
   </sui-comment>
 </template>
@@ -19,6 +26,14 @@ export default {
   computed: {
     date() {
       return format(new Date(this.message.createdAt), "h:mm a");
+    }
+  },
+  methods: {
+    containsImage(message) {
+      return (
+        (message.image && !message.content) ||
+        (message.image && message.content)
+      );
     }
   }
 };
