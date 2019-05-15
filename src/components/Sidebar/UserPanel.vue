@@ -1,6 +1,6 @@
 <template>
   <div class="channels">
-    <sui-dropdown :text="currentUser.displayName">
+    <sui-dropdown :text="currentUser.displayName" class="username">
       <sui-dropdown-menu>
         <sui-dropdown-item disabled>Signed in as {{ currentUser.displayName }}</sui-dropdown-item>
         <sui-dropdown-item>Change Avatar</sui-dropdown-item>
@@ -24,5 +24,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.dropdown {
+  margin-left: 30px;
+}
 </style>
 

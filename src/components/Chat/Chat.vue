@@ -23,7 +23,7 @@ export default {
     ChatForm,
     Message
   },
-  props: ["currentChannel", "messages", "addListeners", "uniqueUsers"],
+  props: ["currentChannel", "messages", "uniqueUsers"],
   computed: {
     ...mapGetters("workspaces", ["currentWorkspace"]),
     workspaceId() {

@@ -1,12 +1,16 @@
 <template>
   <section class="chat-console">
     <div class="chat-container">
-      <Sidebar :channels="channels" :changeChannel="changeChannel" :newChannel="newChannel"></Sidebar>
+      <Sidebar
+        :channels="channels"
+        :changeChannel="changeChannel"
+        :newChannel="newChannel"
+        :currentChannel="currentChannel"
+      ></Sidebar>
       <Chat
         class="chat"
         :currentChannel="currentChannel"
         :messages="messages"
-        :addListeners="addListeners"
         :uniqueUsers="uniqueUsers"
       ></Chat>
     </div>
@@ -30,7 +34,8 @@ export default {
     messages: [],
     channels: [],
     currentChannel: "",
-    uniqueUsers: ""
+    uniqueUsers: "",
+    currentWorkspace: ""
   }),
   computed: {
     workspaceId() {
@@ -99,7 +104,10 @@ export default {
         });
       });
     },
-    addChannelsListeners() {
+    addChannelsListeners(id) {
+      if (id) {
+        console.log(id);
+      }
       const channelsRef = db.collection(
         `workspaces/${this.workspaceId}/channels`
       );

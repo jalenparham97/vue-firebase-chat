@@ -1,9 +1,13 @@
 <template>
   <div class="sidebar-container">
     <div class="sidebar">
-      <h1>{{ workspace }}</h1>
+      <h3>{{ workspace }}</h3>
       <UserPanel/>
-      <Channels :channels="channels" :changeChannel="changeChannel"/>
+      <Channels
+        :channels="channels"
+        :changeChannel="changeChannel"
+        :currentChannel="currentChannel"
+      />
     </div>
     <Modal :newChannel="newChannel"/>
   </div>
@@ -21,7 +25,7 @@ export default {
     Channels,
     Modal
   },
-  props: ["channels", "changeChannel", "newChannel"],
+  props: ["channels", "changeChannel", "newChannel", "currentChannel"],
   created() {
     const workspace = this.$route.params.id;
     this.loadWorkspace(workspace);
@@ -44,8 +48,13 @@ export default {
 .sidebar {
   width: 240px;
   height: 100%;
-  background: #eee !important;
+  background: #4a154b !important;
+  color: #fff;
+}
+
+.sidebar h3 {
   padding-left: 30px;
+  padding-top: 10px;
 }
 </style>
 

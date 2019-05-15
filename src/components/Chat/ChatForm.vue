@@ -8,7 +8,7 @@
           <input type="text" placeholder="Message" v-model="message">
         </div>
       </sui-form>
-      <sui-button class="mt-2" v-b-modal.modal-2>Upload Media</sui-button>
+      <sui-button class="mt-2" v-b-modal.modal-2 icon="cloud">Upload Media</sui-button>
     </sui-segment>
     <FileModal :handleFileUpload="handleFileUpload"/>
   </div>

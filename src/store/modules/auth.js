@@ -54,7 +54,7 @@ const actions = {
             .get()
             .then(currentUser => {
               commit('setCurrentUser', { ...currentUser.data() })
-              router.push('/')
+              router.push('/join/workspace')
             })
             .catch(err => console.log(err))
         }
