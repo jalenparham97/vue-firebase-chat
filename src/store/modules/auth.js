@@ -69,7 +69,7 @@ const actions = {
         user.user
           .updateProfile({
             displayName: newUser.displayName,
-            photoURL: `http://gravitar.com/avatar/${md5(
+            photoURL: `https://gravitar.com/avatar/${md5(
               newUser.email
             )}?d=identicon`
           })
