@@ -8,9 +8,6 @@
 import { mapGetters } from "vuex";
 
 export default {
-  created() {
-    this.$store.dispatch("auth/autoLogin");
-  },
   computed: {
     ...mapGetters("auth", ["currentUser"])
   }

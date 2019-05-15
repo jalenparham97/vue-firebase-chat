@@ -1,33 +1,39 @@
 <template>
   <div class="login">
-    <b-card class="login-card text-center">
+    <sui-segment class="login-card text-center">
       <h1 class="mb-3">Login to BizChat</h1>
 
       <p class="mb-5">
         Don't have an account?
-        <b-link to="/signup">Sign Up</b-link>
+        <router-link to="/signup">Sign Up</router-link>
       </p>
 
-      <b-form class="login-form">
-        <b-form-group>
-          <b-form-input type="email" required placeholder="Email Address"></b-form-input>
-        </b-form-group>
-        <b-form-group>
-          <b-form-input type="password" required placeholder="Password"></b-form-input>
-        </b-form-group>
-
-        <b-button type="submit" variant="primary">SUBMIT</b-button>
-      </b-form>
+      <sui-form @submit.prevent="handleSubmit">
+        <sui-form-field>
+          <sui-input v-model="user.email" placeholder="Email" icon="mail" type="email"/>
+        </sui-form-field>
+        <sui-form-field>
+          <sui-input v-model="user.password" placeholder="Password" icon="lock" type="password"/>
+        </sui-form-field>
+        <sui-button type="submit" fluid>SUBMIT</sui-button>
+      </sui-form>
 
       <p class="mt-3">OR</p>
-      <b-button class="google-btn">LOGIN WITH GOOGLE</b-button>
-    </b-card>
+      <sui-button class="google-btn" fluid>LOGIN WITH GOOGLE</sui-button>
+    </sui-segment>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Login"
+  name: "Login",
+  data: () => ({
+    user: {
+      email: "",
+      passsword: ""
+    }
+  }),
+  methods: {}
 };
 </script>
 
@@ -47,14 +53,7 @@ export default {
   justify-content: center;
 }
 
-.login-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
 .google-btn {
-  width: 100%;
 }
 </style>
 

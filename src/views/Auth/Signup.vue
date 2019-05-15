@@ -1,35 +1,32 @@
 <template>
   <div class="signup">
-    <b-card class="signup-card text-center">
+    <sui-segment class="signup-card text-center">
       <h1 class="mb-3">Sign up for BizChat</h1>
 
       <p class="mb-5">
         Already have an account?
-        <b-link to="/login">Login</b-link>
+        <router-link to="/login">Login</router-link>
       </p>
 
-      <b-form @submit.prevent="handleSubmit" class="signup-form">
-        <b-form-group>
-          <b-form-input v-model="user.email" type="email" required placeholder="Email Address"></b-form-input>
-        </b-form-group>
-        <b-form-group>
-          <b-form-input v-model="user.password" type="password" required placeholder="Password"></b-form-input>
-        </b-form-group>
-        <b-form-group>
-          <b-form-input
-            v-model="confirmPassword"
-            type="password"
-            required
-            placeholder="Confirm Password"
-          ></b-form-input>
-        </b-form-group>
-
-        <b-button type="submit" variant="primary">SUBMIT</b-button>
-      </b-form>
+      <sui-form @submit.prevent="handleSubmit">
+        <sui-form-field>
+          <sui-input v-model="user.displayName" placeholder="Display Name" icon="user" type="text"/>
+        </sui-form-field>
+        <sui-form-field>
+          <sui-input v-model="user.email" placeholder="Email" icon="mail" type="email"/>
+        </sui-form-field>
+        <sui-form-field>
+          <sui-input v-model="user.password" placeholder="Password" icon="lock" type="password"/>
+        </sui-form-field>
+        <sui-form-field>
+          <sui-input v-model="confirmPassword" placeholder="Confirm Password" type="password"/>
+        </sui-form-field>
+        <sui-button type="submit" fluid>SUBMIT</sui-button>
+      </sui-form>
 
       <p class="mt-3">OR</p>
-      <b-button class="google-btn" @click="googleSignIn">SIGN UP WITH GOOGLE</b-button>
-    </b-card>
+      <sui-button class="google-btn" @click="googleSignIn" fluid>SIGN UP WITH GOOGLE</sui-button>
+    </sui-segment>
   </div>
 </template>
 
@@ -38,17 +35,52 @@ export default {
   name: "Signup",
   data: () => ({
     user: {
+      displayName: "",
       email: "",
       password: ""
     },
     confirmPassword: ""
   }),
+  computed: {
+    passwordConfirm() {
+      return this.user.password !== this.confirmPassword
+        ? "Passwords do not match"
+        : "";
+    }
+  },
   methods: {
     handleSubmit() {
-      console.log(this.user);
+      if (this.isFormValid()) {
+        this.$store.dispatch("auth/signUpWithEmail", this.user);
+      }
     },
     googleSignIn() {
       this.$store.dispatch("auth/googleAuth");
+    },
+    isFormValid() {
+      if (this.isFormEmpty(this.user, this.confirmPassword)) {
+        console.log("Please fill in all fields");
+        return false;
+      } else {
+        return true;
+      }
+    },
+    isFormEmpty({ displayName, email, password }, confirmPassword) {
+      return (
+        !displayName.length ||
+        !email.length ||
+        !password.length ||
+        !confirmPassword.length
+      );
+    },
+    isPasswordValid({ password, confirmPassword }) {
+      if (password.length < 6 || confirmPassword.length < 6) {
+        return false;
+      } else if (password !== confirmPassword) {
+        return false;
+      } else {
+        return true;
+      }
     }
   }
 };
@@ -77,6 +109,6 @@ export default {
 }
 
 .google-btn {
-  width: 100%;
+  // width: 100%;
 }
 </style>

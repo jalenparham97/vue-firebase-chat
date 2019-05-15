@@ -1,7 +1,7 @@
 import firebase from '@/db/firebase'
 import router from '@/router'
 import db from '@/db/db'
-import { longStackSupport } from 'q'
+import md5 from 'md5'
 
 const state = {
   currentUser: {}
@@ -19,12 +19,10 @@ const actions = {
         router.push('/signup')
       })
   },
-  autoLogin({ commit }) {
-    firebase.auth().onAuthStateChanged(userData => {
-      const userRef = db.collection('users').doc(userData.uid)
-      userRef.get().then(user => {
-        commit('setCurrentUser', { ...user.data() })
-      })
+  autoLogin({ commit }, user) {
+    const userRef = db.collection('users').doc(user.uid)
+    userRef.get().then(user => {
+      commit('setCurrentUser', { ...user.data() })
     })
   },
   googleAuth({ commit }) {
@@ -58,6 +56,37 @@ const actions = {
             })
             .catch(err => console.log(err))
         }
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
+  signUpWithEmail({ commit }, newUser) {
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(newUser.email, newUser.password)
+      .then(user => {
+        user.user
+          .updateProfile({
+            displayName: newUser.displayName,
+            photoURL: `http://gravitar.com/avatar/${md5(
+              newUser.email
+            )}?d=identicon`
+          })
+          .then(() => {
+            const currentUser = {
+              id: user.user.uid,
+              email: user.user.email,
+              displayName: user.user.displayName,
+              avatar: user.user.photoURL
+            }
+            db.collection('users')
+              .doc(currentUser.id)
+              .set(currentUser)
+            commit('setCurrentUser', currentUser)
+            router.push('/new/workspace')
+          })
+          .catch(err => console.log(err))
       })
       .catch(error => {
         console.log(error)

@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import db from "../../db/db";
 
 export default {
@@ -20,15 +21,25 @@ export default {
     workspaceName: "",
     error: ""
   }),
+  computed: {
+    ...mapGetters("auth", ["currentUser"])
+  },
   methods: {
     joinWorkspace() {
       const workspaceRef = db.collection("workspaces");
+      const userWorkspaceRef = db.collection(
+        `users/${this.currentUser.id}/workspaces`
+      );
       workspaceRef
         .get()
         .then(snapShot => {
           snapShot.docs.forEach(doc => {
             if (this.workspaceName === doc.data().workspace) {
               this.$router.push(`/${doc.data().id}`);
+              userWorkspaceRef
+                .doc(doc.data().id)
+                .set(doc.data())
+                .then(() => console.log(doc.data()));
             } else {
               console.log("Workspace does not exist");
             }

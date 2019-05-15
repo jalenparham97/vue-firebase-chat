@@ -127,7 +127,7 @@ export default {
 <style lang="scss" scoped>
 .chat-form {
   position: fixed;
-  bottom: 1em;
+  bottom: 0.1px;
   margin-left: 260px !important;
   margin-right: 5px;
   left: 0;
