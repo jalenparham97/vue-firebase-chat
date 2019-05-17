@@ -62,11 +62,11 @@ export default {
 }
 
 .channel {
-  margin-left: 12px;
+  margin-left: 22px;
 }
 
 .item {
-  margin: 0px 10px !important;
+  border-radius: none;
 }
 </style>
 
