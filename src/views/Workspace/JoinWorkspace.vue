@@ -1,13 +1,18 @@
 <template>
   <div class="join">
-    <sui-segment class="join-segment">
-      <h1 is="sui-header" class="text-center mb-5 mt-2">Join a Workspace</h1>
+    <sui-segment class="join-segment text-center">
+      <h1 class="mb-5">Join a Workspace</h1>
       <sui-form @submit.prevent="joinWorkspace">
         <sui-form-field>
           <sui-input placeholder="Workspace Name" v-model="workspaceName"/>
         </sui-form-field>
         <sui-button type="submit" fluid>Submit</sui-button>
       </sui-form>
+
+      <p class="mt-4">
+        Want to create a new workspace
+        <router-link to="/new/workspace">Create</router-link>
+      </p>
     </sui-segment>
   </div>
 </template>
@@ -35,13 +40,13 @@ export default {
         .then(snapShot => {
           snapShot.docs.forEach(doc => {
             if (this.workspaceName === doc.data().workspace) {
+              localStorage.setItem("workspaceId", doc.data().id);
               this.$router.push(`/${doc.data().id}`);
               userWorkspaceRef
                 .doc(doc.data().id)
                 .set(doc.data())
-                .then(() => console.log(doc.data()));
-            } else {
-              console.log("Workspace does not exist");
+                .then(() => (this.workspaceName = ""))
+                .catch(err => console.log(err));
             }
           });
         })

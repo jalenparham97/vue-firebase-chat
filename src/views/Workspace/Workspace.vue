@@ -1,16 +1,19 @@
 <template>
   <div class="workspace">
-    <b-card class="workspace-card text-center">
-      <h1 class="mb-5">Create a new workspace</h1>
+    <sui-segment class="workspace-card text-center">
+      <h1 class="mb-5">Create a new Workspace</h1>
+      <sui-form @submit.prevent="handleSubmit">
+        <sui-form-field>
+          <sui-input type="text" required placeholder="Workspace Name" v-model="workspace"/>
+        </sui-form-field>
+        <sui-button type="submit" fluid>Submit</sui-button>
+      </sui-form>
 
-      <b-form class="workspace-form" @submit.prevent="handleSubmit">
-        <b-form-group>
-          <b-form-input type="text" required placeholder="Workspace Name" v-model="workspace"></b-form-input>
-        </b-form-group>
-
-        <b-button type="submit" variant="primary">Create</b-button>
-      </b-form>
-    </b-card>
+      <p class="mt-4">
+        Want to join an existing workspace
+        <router-link to="/join/workspace">Join</router-link>
+      </p>
+    </sui-segment>
   </div>
 </template>
 
@@ -39,6 +42,13 @@ export default {
         creator: this.currentUser,
         id: uuidv4()
       };
+      if (localStorage.workspaceId) {
+        localStorage.workspaceId = workspace.id;
+        console.log(localStorage.workspaceId);
+      } else {
+        localStorage.setItem("workspaceId", workspace.id);
+        console.log(localStorage.workspaceId);
+      }
       this.addWorkspace(workspace);
       userWorkspaceRef
         .doc(workspace.id)
@@ -51,18 +61,12 @@ export default {
 
 <style lang="scss" scoped>
 .workspace {
-  height: 100%;
+  display: flex;
 }
 
 .workspace-card {
   width: 500px;
-  margin: 200px auto auto auto;
-}
-
-.workspace-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  margin: 200px auto auto auto !important;
 }
 </style>
 

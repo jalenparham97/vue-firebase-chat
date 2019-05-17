@@ -30,6 +30,9 @@ export default {
       return this.$route.params.id;
     }
   }
+  // created() {
+  //   console.log(localStorage.workspaceId);
+  // }
 };
 </script>
 
