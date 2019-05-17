@@ -6,7 +6,7 @@
         <sui-icon name="plus" @click="toggleModal" v-b-modal.modal-1/>
       </div>
       <div
-        class="item"
+        class="channel-item"
         :class="[channel.id === currentChannel.id ? 'active' : '']"
         v-for="channel in channels"
         :key="channel.id"
@@ -65,8 +65,8 @@ export default {
   margin-left: 22px;
 }
 
-.item {
-  border-radius: none !important;
+.channel-item {
+  border-radius: 0px !important;
 }
 </style>
 
