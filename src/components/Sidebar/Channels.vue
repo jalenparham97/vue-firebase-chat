@@ -66,7 +66,7 @@ export default {
 }
 
 .item {
-  border-radius: none;
+  border-radius: none !important;
 }
 </style>
 
