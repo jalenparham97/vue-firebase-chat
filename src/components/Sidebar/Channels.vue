@@ -55,6 +55,7 @@ export default {
 .plus {
   margin-right: 30px;
   cursor: pointer;
+  // font-size: 1.2rem;
 }
 
 .new-channel span {

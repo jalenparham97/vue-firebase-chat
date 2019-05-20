@@ -18,7 +18,7 @@ export default new Router({
       name: 'LandingPage',
       component: LandingPage,
       beforeEnter(to, from, next) {
-        if (localStorage.workspaceId) {
+        if (localStorage.workspaceId && localStorage.user) {
           next(`/${localStorage.workspaceId}`)
         }
       }

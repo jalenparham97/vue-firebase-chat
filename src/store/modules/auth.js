@@ -11,6 +11,7 @@ const mutations = {
 }
 const actions = {
   logout({ commit }) {
+    localStorage.removeItem('user')
     firebase
       .auth()
       .signOut()
@@ -30,7 +31,7 @@ const actions = {
       .auth()
       .signInWithPopup(new firebase.auth.GoogleAuthProvider())
       .then(user => {
-        console.log(user)
+        localStorage.setItem('user', 'user')
         if (user.additionalUserInfo.isNewUser) {
           const newUser = {
             id: user.user.uid,
@@ -48,11 +49,16 @@ const actions = {
             .catch(err => console.log(err))
         } else {
           const userRef = db.collection('users').doc(user.user.uid)
+          localStorage.setItem('user', 'user')
           userRef
             .get()
             .then(currentUser => {
               commit('setCurrentUser', { ...currentUser.data() })
-              router.push('/join/workspace')
+              if (localStorage.workspaceId) {
+                router.push(`/${localStorage.workspaceId}`)
+              } else {
+                router.push('/join/workspace')
+              }
             })
             .catch(err => console.log(err))
         }
