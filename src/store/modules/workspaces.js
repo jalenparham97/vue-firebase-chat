@@ -1,5 +1,7 @@
 import router from '@/router'
 import db from '@/db/db'
+import uuidv4 from 'uuid/v4'
+import { getTime } from 'date-fns'
 
 const state = {
   currentWorkspace: null
@@ -11,10 +13,19 @@ const mutations = {
 const actions = {
   addWorkspace({ commit }, newWorkspace) {
     const workspacesRef = db.collection('workspaces')
+    const channelsRef = db.collection(`workspaces/${newWorkspace.id}/channels`)
+    const channel = {
+      name: 'general',
+      details: 'A space for general topics',
+      createdAt: getTime(new Date()),
+      createdBy: newWorkspace.creator,
+      id: uuidv4()
+    }
     workspacesRef
       .doc(newWorkspace.id)
       .set(newWorkspace)
       .then(() => {
+        channelsRef.doc(channel.id).set(channel)
         commit('setCurrentWorkspace', newWorkspace)
         router.push(`/${newWorkspace.id}`)
       })

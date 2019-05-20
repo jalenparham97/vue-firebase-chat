@@ -33,6 +33,7 @@ const actions = {
       .then(user => {
         localStorage.setItem('user', 'user')
         if (user.additionalUserInfo.isNewUser) {
+          localStorage.setItem('user', 'user')
           const newUser = {
             id: user.user.uid,
             email: user.user.email,
@@ -49,7 +50,6 @@ const actions = {
             .catch(err => console.log(err))
         } else {
           const userRef = db.collection('users').doc(user.user.uid)
-          localStorage.setItem('user', 'user')
           userRef
             .get()
             .then(currentUser => {
@@ -68,15 +68,17 @@ const actions = {
       })
   },
   signUpWithEmail({ commit }, newUser) {
+    const { email, password, displayName } = newUser
     firebase
       .auth()
-      .createUserWithEmailAndPassword(newUser.email, newUser.password)
+      .createUserWithEmailAndPassword(email, password)
       .then(user => {
+        localStorage.setItem('user', 'user')
         user.user
           .updateProfile({
-            displayName: newUser.displayName,
+            displayName,
             photoURL: `https://www.gravatar.com/avatar/${md5(
-              newUser.email
+              email
             )}?d=identicon`
           })
           .then(() => {
@@ -96,6 +98,27 @@ const actions = {
       })
       .catch(error => {
         console.log(error)
+      })
+  },
+  signInWithEmail({ commit }, user) {
+    const { email, password } = user
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(currentUser => {
+        const userRef = db.collection('users').doc(currentUser.user.uid)
+        userRef
+          .get()
+          .then(signedInUser => {
+            localStorage.setItem('user', 'user')
+            commit('setCurrentUser', { ...signedInUser.data() })
+            if (localStorage.workspaceId) {
+              router.push(`/${localStorage.workspaceId}`)
+            } else {
+              router.push('/join/workspace')
+            }
+          })
+          .catch(err => console.log(err))
       })
   }
 }

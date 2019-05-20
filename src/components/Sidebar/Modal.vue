@@ -1,5 +1,5 @@
 <template>
-  <b-modal id="modal-1" title="Add a new channel" centered v-model="open">
+  <b-modal id="modal-1" title="Add a new channel" v-model="open">
     <form>
       <div class="ui labeled input mb-4 w-100">
         <div class="ui label">Name of channel</div>
@@ -57,7 +57,8 @@ export default {
       channelsRef
         .doc(channel.id)
         .set(channel)
-        .then(() => this.newChannel(channel));
+        .then(() => this.newChannel(channel))
+        .catch(err => console.log(err));
       this.toggle();
     }
   }

@@ -44,16 +44,15 @@ export default {
       };
       if (localStorage.workspaceId) {
         localStorage.workspaceId = workspace.id;
-        console.log(localStorage.workspaceId);
       } else {
         localStorage.setItem("workspaceId", workspace.id);
-        console.log(localStorage.workspaceId);
       }
       this.addWorkspace(workspace);
       userWorkspaceRef
         .doc(workspace.id)
         .set(workspace)
-        .then(() => console.log(workspace));
+        .then(() => console.log(workspace))
+        .catch(err => console.log(err));
     }
   }
 };
