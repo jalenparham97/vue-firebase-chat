@@ -20,6 +20,8 @@ export default new Router({
       beforeEnter(to, from, next) {
         if (localStorage.workspaceId && localStorage.user) {
           next(`/${localStorage.workspaceId}`)
+        } else {
+          next('/signup')
         }
       }
     },
@@ -47,6 +49,13 @@ export default new Router({
       path: '/:id',
       name: 'ChatConsole',
       component: ChatConsole
+      // beforeEnter(to, from, next) {
+      //   if (localStorage.user) {
+      //     next()
+      //   } else {
+      //     next('/signup')
+      //   }
+      // }
     }
   ]
 })

@@ -19,8 +19,6 @@ new Vue({
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.$store.dispatch('auth/autoLogin', user)
-      } else {
-        this.$router.push('/signup')
       }
     })
   },

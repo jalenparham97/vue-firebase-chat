@@ -5,21 +5,44 @@
 
       <p class="mb-5">
         Already have an account?
-        <router-link to="/login">Login</router-link>
+        <router-link to="/login" id="login-link">Login</router-link>
       </p>
 
       <sui-form @submit.prevent="handleSubmit">
         <sui-form-field>
-          <sui-input v-model="user.displayName" placeholder="Display Name" icon="user" type="text"/>
+          <sui-input
+            v-model="user.displayName"
+            placeholder="Display Name"
+            icon="user"
+            type="text"
+            name="displayName"
+          />
         </sui-form-field>
         <sui-form-field>
-          <sui-input v-model="user.email" placeholder="Email" icon="mail" type="email"/>
+          <sui-input
+            v-model="user.email"
+            placeholder="Email"
+            icon="mail"
+            type="email"
+            name="email"
+          />
         </sui-form-field>
         <sui-form-field>
-          <sui-input v-model="user.password" placeholder="Password" icon="lock" type="password"/>
+          <sui-input
+            v-model="user.password"
+            placeholder="Password"
+            icon="lock"
+            type="password"
+            name="password"
+          />
         </sui-form-field>
         <sui-form-field>
-          <sui-input v-model="confirmPassword" placeholder="Confirm Password" type="password"/>
+          <sui-input
+            v-model="confirmPassword"
+            placeholder="Confirm Password"
+            type="password"
+            name="verifyPassword"
+          />
         </sui-form-field>
         <sui-button type="submit" fluid>SUBMIT</sui-button>
       </sui-form>

@@ -4,7 +4,13 @@
       <h1 class="mb-5">Create a new Workspace</h1>
       <sui-form @submit.prevent="handleSubmit">
         <sui-form-field>
-          <sui-input type="text" required placeholder="Workspace Name" v-model="workspace"/>
+          <sui-input
+            type="text"
+            required
+            placeholder="Workspace Name"
+            v-model="workspace"
+            name="workspaceName"
+          />
         </sui-form-field>
         <sui-button type="submit" fluid>Submit</sui-button>
       </sui-form>

@@ -10,10 +10,22 @@
 
       <sui-form @submit.prevent="handleSubmit">
         <sui-form-field>
-          <sui-input v-model="user.email" placeholder="Email" icon="mail" type="email"/>
+          <sui-input
+            v-model="user.email"
+            placeholder="Email"
+            icon="mail"
+            type="email"
+            name="email"
+          />
         </sui-form-field>
         <sui-form-field>
-          <sui-input v-model="user.password" placeholder="Password" icon="lock" type="password"/>
+          <sui-input
+            v-model="user.password"
+            placeholder="Password"
+            icon="lock"
+            type="password"
+            name="password"
+          />
         </sui-form-field>
         <sui-button type="submit" fluid>SUBMIT</sui-button>
       </sui-form>
@@ -33,7 +45,14 @@ export default {
       passsword: ""
     }
   }),
-  methods: {}
+  methods: {
+    isFormEmpty({ email, password }) {
+      return !email.length || !password.length;
+    },
+    handleSubmit() {
+      this.$store.dispatch("auth/signInWithEmail", this.user);
+    }
+  }
 };
 </script>
 

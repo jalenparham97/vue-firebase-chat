@@ -17,7 +17,7 @@ const actions = {
       .signOut()
       .then(() => {
         commit('setCurrentUser', {})
-        router.push('/signup')
+        router.push('/login')
       })
   },
   autoLogin({ commit }, user) {
