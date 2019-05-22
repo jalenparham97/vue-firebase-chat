@@ -8,6 +8,7 @@
         :changeChannel="changeChannel"
         :currentChannel="currentChannel"
       />
+      <DirectMessages/>
     </div>
     <Modal :newChannel="newChannel"/>
   </div>
@@ -17,12 +18,14 @@
 import { mapGetters, mapActions } from "vuex";
 import UserPanel from "./UserPanel.vue";
 import Channels from "./Channels.vue";
+import DirectMessages from "./DirectMessages.vue";
 import Modal from "./Modal.vue";
 
 export default {
   components: {
     UserPanel,
     Channels,
+    DirectMessages,
     Modal
   },
   props: ["channels", "changeChannel", "newChannel", "currentChannel"],

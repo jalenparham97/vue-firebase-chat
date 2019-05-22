@@ -4,7 +4,7 @@
       <h1 class="mb-5">Join a Workspace</h1>
       <sui-form @submit.prevent="joinWorkspace">
         <sui-form-field>
-          <sui-input placeholder="Workspace Name" v-model="workspaceName"/>
+          <sui-input placeholder="Workspace Name" v-model="workspaceName" name="workspaceName"/>
         </sui-form-field>
         <sui-button type="submit" fluid>Submit</sui-button>
       </sui-form>

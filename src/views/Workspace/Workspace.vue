@@ -48,16 +48,12 @@ export default {
         creator: this.currentUser,
         id: uuidv4()
       };
-      if (localStorage.workspaceId) {
-        localStorage.workspaceId = workspace.id;
-      } else {
-        localStorage.setItem("workspaceId", workspace.id);
-      }
+      // localStorage.setItem("workspaceId", workspace.id);
       this.addWorkspace(workspace);
       userWorkspaceRef
         .doc(workspace.id)
         .set(workspace)
-        .then(() => console.log(workspace))
+        .then(() => localStorage.setItem("workspaceId", workspace.id))
         .catch(err => console.log(err));
     }
   }

@@ -1,11 +1,11 @@
 <template>
-  <div class="channels">
+  <div class="direct-messages">
     <div class="ui middle aligned selection list inverted">
-      <div class="new-channel">
-        <span>Channels</span>
-        <sui-icon class="channel-plus" name="plus" @click="toggleModal" v-b-modal.modal-1/>
+      <div class="new-direct-message">
+        <span>Direct Messages</span>
+        <sui-icon name="plus"/>
       </div>
-      <div
+      <!-- <div
         class="channel-item"
         :class="[channel.id === currentChannel.id ? 'active' : '']"
         v-for="channel in channels"
@@ -16,38 +16,21 @@
         <div class="content">
           <span class="channel"># {{ channel.name }}</span>
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import db from "../../db/db";
-
-export default {
-  props: ["channels", "changeChannel", "currentChannel"],
-  data: () => ({
-    open: false
-  }),
-  computed: {
-    ...mapGetters("workspaces", ["currentWorkspace"])
-  },
-  methods: {
-    ...mapActions("channels", ["setChannel"]),
-    toggleModal() {
-      this.open = !this.open;
-    }
-  }
-};
+export default {};
 </script>
 
 <style lang="scss" scoped>
-.channels {
+.direct-messages {
   margin-top: 50px;
 }
 
-.new-channel {
+.new-direct-message {
   display: flex;
   justify-content: space-between;
 }
@@ -58,16 +41,15 @@ export default {
   // font-size: 1.2rem;
 }
 
-.new-channel span {
+.new-direct-message span {
   margin-left: 30px;
 }
 
-.channel {
+.direct-message {
   margin-left: 22px;
 }
 
-.channel-item {
+.direct-message-item {
   border-radius: 0px !important;
 }
 </style>
-

@@ -2,10 +2,10 @@
   <div>
     <sui-segment class="chat-form">
       <Progressbar :uploadState="uploadState" :percentUploaded="percentUploaded"/>
-      <sui-form @submit.prevent="addMessage">
+      <sui-form @submit.prevent="addMessage" id="chat-form">
         <div class="ui left action input fluid">
           <sui-button icon="plus"/>
-          <input type="text" placeholder="Message" v-model="message">
+          <input type="text" placeholder="Message" v-model="message" name="chatInput">
         </div>
       </sui-form>
       <sui-button class="mt-2" v-b-modal.modal-2 icon="cloud">Upload Media</sui-button>

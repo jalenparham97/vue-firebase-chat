@@ -4,7 +4,7 @@
     color="green"
     progress
     :percent="percentUploaded"
-    size="tiny"
+    size="standard"
   />
 </template>
 

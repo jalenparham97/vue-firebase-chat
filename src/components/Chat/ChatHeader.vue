@@ -58,6 +58,7 @@ export default {
       });
     },
     goToWorkspace(workspaceId) {
+      localStorage.setItem("workspaceId", workspaceId);
       this.$router.push(`/${workspaceId}`);
       window.location.reload();
     }

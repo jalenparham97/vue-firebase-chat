@@ -1,12 +1,16 @@
+/// <reference types="Cypress" />
+
 import Chance from 'chance'
 const chance = new Chance()
 
-describe('Chat App Tests', () => {
+describe('Authentication Tests', () => {
   let displayName
   let email
   const password = 'abc123'
+  const loginLink = true
 
   beforeEach(() => {
+    cy.clearLocalStorage()
     cy.visit('/')
     displayName = chance.name()
     email = chance.email()
@@ -22,17 +26,7 @@ describe('Chat App Tests', () => {
 
   it('logs in an existing user', () => {
     const userEmail = 'jborne@gmail.com'
-    cy.login(userEmail, password)
+    cy.login(userEmail, password, loginLink)
     cy.contains('Join a Workspace')
   })
-
-  it('Creates a new Workspace', () => {
-    const workspaceName = chance.word({ length: 5 })
-    cy.signup(displayName, email, password)
-    cy.get('input[name=workspaceName]').type(workspaceName)
-    cy.get('button[type=submit]').click()
-    cy.contains(workspaceName)
-  })
-
-  it('Joins a new Workspace', () => {})
 })

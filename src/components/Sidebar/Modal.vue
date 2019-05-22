@@ -1,18 +1,18 @@
 <template>
   <b-modal id="modal-1" title="Add a new channel" v-model="open">
-    <form>
+    <form id="channel-form">
       <div class="ui labeled input mb-4 w-100">
         <div class="ui label">Name of channel</div>
-        <input type="text" v-model="channel.channelName">
+        <input type="text" v-model="channel.channelName" name="channelName">
       </div>
       <div class="ui labeled input w-100">
         <div class="ui label">About the channel</div>
-        <input type="text" v-model="channel.channelDetails">
+        <input type="text" v-model="channel.channelDetails" name="channelDetails">
       </div>
     </form>
     <div slot="modal-footer">
       <sui-button class="float-right ml-3" @click="toggle">Close</sui-button>
-      <sui-button class="float-right" @click="addChannel">Add</sui-button>
+      <sui-button class="float-right" @click="addChannel" name="submit-btn">Add</sui-button>
     </div>
   </b-modal>
 </template>
