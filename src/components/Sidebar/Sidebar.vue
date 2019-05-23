@@ -49,6 +49,8 @@ export default {
 
 <style lang="scss" scoped>
 .sidebar {
+  overflow-y: scroll;
+  padding-bottom: 50px;
   width: 240px;
   height: 100%;
   background: #4a154b !important;

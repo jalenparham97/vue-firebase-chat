@@ -22,6 +22,7 @@ import Sidebar from "../../components/Sidebar/Sidebar.vue";
 import Chat from "../../components/Chat/Chat.vue";
 import db from "../../db/db";
 import { mapGetters } from "vuex";
+import { messaging } from "firebase";
 
 export default {
   name: "ChatConsole",
@@ -43,22 +44,7 @@ export default {
     }
   },
   created() {
-    const messagesRef = db
-      .collection(
-        `workspaces/${this.workspaceId}/channels/${
-          this.currentChannel.id
-        }/messages`
-      )
-      .orderBy("createdAt", "asc");
-    const loadedMessages = [];
-    messagesRef.onSnapshot(snapShot => {
-      snapShot.docChanges().forEach(change => {
-        if (change.type === "added") {
-          loadedMessages.push(change.doc.data());
-          this.messages = loadedMessages;
-        }
-      });
-    });
+    this.addListeners();
   },
   mounted() {
     this.getChannels();

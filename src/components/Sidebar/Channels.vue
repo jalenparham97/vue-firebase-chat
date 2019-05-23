@@ -17,6 +17,12 @@
           <span class="channel"># {{ channel.name }}</span>
         </div>
       </div>
+      <div class="add-channel-item" is="sui-menu-item" v-b-modal.modal-1>
+        <div class="content">
+          <sui-icon class="add-plus" name="plus"/>
+          <span>Add a channel</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -52,10 +58,14 @@ export default {
   justify-content: space-between;
 }
 
-.plus {
-  margin-right: 30px;
-  cursor: pointer;
+.channel-plus {
+  margin-right: 30px !important;
+  cursor: pointer !important;
   // font-size: 1.2rem;
+}
+
+.add-plus {
+  margin-left: 19px;
 }
 
 .new-channel span {
@@ -66,8 +76,13 @@ export default {
   margin-left: 22px;
 }
 
-.channel-item {
+.channel-item,
+.add-channel-item {
   border-radius: 0px !important;
+}
+
+.add-channel-item {
+  margin-top: 20px !important;
 }
 </style>
 

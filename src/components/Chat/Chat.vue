@@ -1,11 +1,7 @@
 <template>
   <div class="chat">
     <ChatHeader :currentChannel="currentChannel" :uniqueUsers="uniqueUsers"/>
-    <div class="messages">
-      <sui-comment-group>
-        <Message v-for="message in messages" :key="message.id" :message="message"/>
-      </sui-comment-group>
-    </div>
+    <Messages :messages="messages"/>
     <ChatForm :currentChannel="currentChannel"/>
   </div>
 </template>
@@ -13,7 +9,7 @@
 <script>
 import ChatHeader from "./ChatHeader.vue";
 import ChatForm from "./ChatForm.vue";
-import Message from "./Message.vue";
+import Messages from "./Messages.vue";
 import { mapGetters } from "vuex";
 import db from "../../db/db";
 
@@ -21,9 +17,14 @@ export default {
   components: {
     ChatHeader,
     ChatForm,
-    Message
+    Messages
   },
   props: ["currentChannel", "messages", "uniqueUsers"],
+  data: () => ({
+    config: {
+      childList: true
+    }
+  }),
   computed: {
     ...mapGetters("workspaces", ["currentWorkspace"]),
     workspaceId() {
@@ -34,8 +35,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.messages {
-  height: 60%;
-  overflow-y: scroll;
-}
 </style>

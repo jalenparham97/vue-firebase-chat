@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import ChatConsole from './views/Chat/ChatConsole.vue'
-import Login from './views/Auth/Login.vue'
 import Signup from './views/Auth/Signup.vue'
 import Workspace from './views/Workspace/Workspace.vue'
 import JoinWorkspace from './views/Workspace/JoinWorkspace.vue'
@@ -28,7 +27,7 @@ export default new Router({
     {
       path: '/login',
       name: 'Login',
-      component: Login
+      component: () => import('./views/Auth/Login.vue')
     },
     {
       path: '/signup',

@@ -5,7 +5,13 @@
       <sui-form @submit.prevent="addMessage" id="chat-form">
         <div class="ui left action input fluid">
           <sui-button icon="plus"/>
-          <input type="text" placeholder="Message" v-model="message" name="chatInput">
+          <input
+            type="text"
+            placeholder="Message"
+            v-model="message"
+            name="chatInput"
+            autocomplete="off"
+          >
         </div>
       </sui-form>
       <sui-button class="mt-2" v-b-modal.modal-2 icon="cloud">Upload Media</sui-button>
@@ -70,7 +76,9 @@ export default {
       messagesRef
         .doc()
         .set(this.createMessage())
-        .then(() => (this.loading = false))
+        .then(() => {
+          this.loading = false;
+        })
         .catch(err => console.log(err));
       this.message = "";
     },

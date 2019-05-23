@@ -40,7 +40,7 @@ describe('Workspaces Tests', () => {
     cy.login(userEmail, password, loginLink)
     cy.joinWorkspace(workspaceName)
     cy.get('div.search > .ml-3').click()
-    cy.get(':nth-child(3) > .content').click()
+    cy.get('.sidebar > .middle > :nth-child(2) > .content').click()
     cy.get('.sidebar > h3').should('not.contain', workspaceName)
   })
 })
