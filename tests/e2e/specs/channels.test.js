@@ -25,17 +25,17 @@ describe('Channels and Messages Tests', () => {
     cy.createChannel(channel)
   })
 
+  it('Channel should have active class', () => {
+    cy.get(
+      '#app > section > div > div.sidebar-container > div.sidebar > div:nth-child(3) > div > div:nth-child(3)'
+    ).click()
+    cy.get(
+      '#app > section > div > div.sidebar-container > div.sidebar > div:nth-child(3) > div > div:nth-child(3)'
+    ).should('have.class', 'active')
+  })
+
   it('Creates a new message', () => {
     cy.get('input[name=chatInput]').type(message)
     cy.get('#chat-form').submit()
-  })
-
-  it('Should have active class', () => {
-    cy.get(
-      '[data-v-8ceea188=""][data-v-240ac9f2=""] > .ui > :nth-child(3)'
-    ).click()
-    cy.get(
-      '[data-v-8ceea188=""][data-v-240ac9f2=""] > .ui > :nth-child(3)'
-    ).should('have.class', 'active')
   })
 })

@@ -4,10 +4,12 @@ import db from '@/db/db'
 import md5 from 'md5'
 
 const state = {
-  currentUser: {}
+  currentUser: {},
+  error: ''
 }
 const mutations = {
-  setCurrentUser: (state, user) => (state.currentUser = user)
+  setCurrentUser: (state, user) => (state.currentUser = user),
+  setError: (state, error) => (state.error = error)
 }
 const actions = {
   logout({ commit }) {
@@ -97,6 +99,7 @@ const actions = {
           .catch(err => console.log(err))
       })
       .catch(error => {
+        commit('setError', error)
         console.log(error)
       })
   },
@@ -123,7 +126,8 @@ const actions = {
   }
 }
 const getters = {
-  currentUser: state => state.currentUser
+  currentUser: state => state.currentUser,
+  error: state => state.error
 }
 
 export default {

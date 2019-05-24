@@ -38,12 +38,27 @@ Cypress.Commands.add('login', (email, password, loginLink) => {
 })
 
 Cypress.Commands.add('signup', (displayName, email, password) => {
-  cy.get('input[name=displayName]').type(displayName)
-  cy.get('input[name=email]').type(email)
-  cy.get('input[name=password]').type(password)
-  cy.get('input[name=verifyPassword]').type(password)
-  cy.get('button[type=submit]').click()
-  cy.contains('Create a new Workspace')
+  if (email === '') {
+    cy.get('input[name=displayName]').type(displayName)
+    cy.get('input[name=password]').type(password)
+    cy.get('input[name=verifyPassword]').type(password)
+    cy.get('button[type=submit]').click()
+  } else if (displayName === '') {
+    cy.get('input[name=email]').type(email)
+    cy.get('input[name=password]').type(password)
+    cy.get('input[name=verifyPassword]').type(password)
+    cy.get('button[type=submit]').click()
+  } else if (password === '') {
+    cy.get('input[name=displayName]').type(displayName)
+    cy.get('input[name=email]').type(email)
+    cy.get('button[type=submit]').click()
+  } else {
+    cy.get('input[name=displayName]').type(displayName)
+    cy.get('input[name=email]').type(email)
+    cy.get('input[name=password]').type(password)
+    cy.get('input[name=verifyPassword]').type(password)
+    cy.get('button[type=submit]').click()
+  }
 })
 
 Cypress.Commands.add('createChannel', channel => {

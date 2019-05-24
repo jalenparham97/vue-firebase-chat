@@ -112,6 +112,8 @@ export default {
     },
     countUniqueUsers(messages) {
       const uniqueUsers = messages.reduce((acc, message) => {
+        console.log(acc);
+        console.log(message);
         if (!acc.includes(message.user.displayName)) {
           acc.push(message.user.displayName);
         }
