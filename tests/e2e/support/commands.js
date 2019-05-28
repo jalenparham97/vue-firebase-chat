@@ -24,6 +24,23 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+import firebase from '../../../src/db/firebase'
+import db from '../../../src/db/db'
+
+// UI Commands
+Cypress.Commands.add('signout', () => {
+  if (firebase.auth().currentUser) {
+    firebase
+      .auth()
+      .signOut()
+      .then(console.log('signed out'))
+    firebase
+      .auth()
+      .currentUser.delete()
+      .then(console.log('user deleted'))
+  }
+})
+
 Cypress.Commands.add('login', (email, password, loginLink) => {
   if (loginLink) {
     cy.get('#login-link').click()
@@ -71,4 +88,49 @@ Cypress.Commands.add('createChannel', channel => {
 Cypress.Commands.add('joinWorkspace', workspaceName => {
   cy.get('input[name=workspaceName]').type(workspaceName)
   cy.get('form').submit()
+})
+
+// Firebase Commands
+Cypress.Commands.add('resetDb', () => {
+  const workspacesRef = db.collection('workspaces')
+  const usersRef = db.collection('users')
+
+  workspacesRef
+    .get()
+    .then(snapShot => {
+      const batch = db.batch()
+      snapShot.docs.forEach(doc => {
+        if (doc.exists) {
+          const workspace = doc
+          const channelsRef = db.collection(`workspaces/${doc.id}/channels`)
+          channelsRef.get().then(snapShot => {
+            snapShot.docs.forEach(doc => {
+              if (doc.exists) {
+                batch.delete(doc.ref)
+                workspace.ref.delete()
+              }
+            })
+          })
+        }
+      })
+
+      return batch.commit()
+    })
+    .then(() => {
+      console.log('workspaces data deleted')
+    })
+
+  usersRef
+    .get()
+    .then(snapShot => {
+      const batch = db.batch()
+      snapShot.forEach(doc => {
+        doc.ref.delete()
+      })
+
+      return batch.commit()
+    })
+    .then(() => {
+      console.log('Users data deleted')
+    })
 })
