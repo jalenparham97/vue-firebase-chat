@@ -90,47 +90,83 @@ Cypress.Commands.add('joinWorkspace', workspaceName => {
   cy.get('form').submit()
 })
 
+Cypress.Commands.add('createWorkspace', workspaceName => {
+  cy.get('input[name=workspaceName]').type(workspaceName)
+  cy.get('button[type=submit]').click()
+})
+
 // Firebase Commands
-Cypress.Commands.add('resetDb', () => {
+Cypress.Commands.add('resetDb', reset => {
   const workspacesRef = db.collection('workspaces')
   const usersRef = db.collection('users')
 
-  workspacesRef
-    .get()
-    .then(snapShot => {
-      const batch = db.batch()
-      snapShot.docs.forEach(doc => {
-        if (doc.exists) {
-          const workspace = doc
-          const channelsRef = db.collection(`workspaces/${doc.id}/channels`)
+  if (reset === 'workspaces') {
+    workspacesRef.get().then(snapShot => {
+      snapShot.docs.forEach(workspace => {
+        if (workspace.exists) {
+          const channelsRef = db.collection(
+            `workspaces/${workspace.id}/channels`
+          )
           channelsRef.get().then(snapShot => {
-            snapShot.docs.forEach(doc => {
-              if (doc.exists) {
-                batch.delete(doc.ref)
+            snapShot.docs.forEach(channel => {
+              if (channel.exists) {
+                channel.ref.delete()
                 workspace.ref.delete()
               }
             })
+            console.log('Reset: ', reset)
+            console.log('workspaces data deleted')
           })
         }
       })
-
-      return batch.commit()
     })
-    .then(() => {
-      console.log('workspaces data deleted')
-    })
-
-  usersRef
-    .get()
-    .then(snapShot => {
-      const batch = db.batch()
-      snapShot.forEach(doc => {
-        doc.ref.delete()
+  } else {
+    workspacesRef.get().then(snapShot => {
+      snapShot.docs.forEach(workspace => {
+        if (workspace.exists) {
+          const channelsRef = db.collection(
+            `workspaces/${workspace.id}/channels`
+          )
+          channelsRef.get().then(snapShot => {
+            snapShot.docs.forEach(channel => {
+              if (channel.exists) {
+                channel.ref.delete()
+                const messagesRef = db.collection(
+                  `workspaces/${workspace.id}/channels/${channel.id}/messages`
+                )
+                messagesRef.get().then(snapShot => {
+                  snapShot.docs.forEach(message => {
+                    if (message.exists) {
+                      message.ref.delete()
+                      workspace.ref.delete()
+                    }
+                  })
+                })
+              }
+            })
+            console.log('Reset: ', reset)
+            console.log('workspaces data deleted')
+          })
+        }
       })
+    })
+  }
 
-      return batch.commit()
+  usersRef.get().then(snapShot => {
+    snapShot.forEach(user => {
+      if (user.exists) {
+        // user.ref.delete()
+        const workspacesRef = db.collection(`users/${user.id}/workspaces`)
+        workspacesRef.get().then(snapShot => {
+          snapShot.docs.forEach(workspace => {
+            if (workspace.exists) {
+              user.ref.delete()
+              workspace.ref.delete()
+            }
+          })
+          console.log('Users data deleted')
+        })
+      }
     })
-    .then(() => {
-      console.log('Users data deleted')
-    })
+  })
 })

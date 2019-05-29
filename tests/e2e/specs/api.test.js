@@ -3,7 +3,7 @@
 describe('Api Database Testing', () => {
   beforeEach(() => cy.resetDb())
 
-  describe('comments', () => {
+  context('comments', () => {
     it('should get comments from typicode api', () => {
       cy.request('https://jsonplaceholder.typicode.com/comments').then(
         response => {
@@ -16,5 +16,5 @@ describe('Api Database Testing', () => {
     })
   })
 
-  describe('Firestore Operations', () => {})
+  // describe('Firestore Operations', () => {})
 })

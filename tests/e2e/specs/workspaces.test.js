@@ -4,32 +4,26 @@ import Chance from 'chance'
 const chance = new Chance()
 
 describe('Workspaces Tests', () => {
-  let displayName
-  let email
+  const displayName = chance.name()
+  const email = chance.email()
   const password = 'abc123'
-  const userEmail = 'jborne@gmail.com'
   const workspaceName = chance.word({ length: 5 })
+  const reset = 'workspaces'
   const loginLink = true
 
   beforeEach(() => {
     cy.clearLocalStorage()
-    cy.visit('/')
-    displayName = chance.name()
-    email = chance.email()
-  })
-
-  afterEach(() => {
-    cy.resetDb()
   })
 
   it('Creates a new Workspace', () => {
+    cy.visit('/')
     cy.signup(displayName, email, password)
-    cy.get('input[name=workspaceName]').type(workspaceName)
-    cy.get('button[type=submit]').click()
+    cy.createWorkspace(workspaceName)
     cy.contains(workspaceName)
   })
 
   it('Joins a new Workspace', () => {
+    cy.visit('/')
     cy.login(email, password, loginLink)
     cy.joinWorkspace(workspaceName)
     cy.get('.sidebar')
@@ -40,11 +34,15 @@ describe('Workspaces Tests', () => {
       })
   })
 
-  // it('Changes workspace', () => {
-  //   cy.login(userEmail, password, loginLink)
-  //   cy.joinWorkspace(workspaceName)
-  //   cy.get('div.search > .ml-3').click()
-  //   cy.get('.sidebar > .middle > :nth-child(2) > .content').click()
-  //   cy.get('.sidebar > h3').should('not.contain', workspaceName)
-  // })
+  it('Changes workspace', () => {
+    const newWorkspaceName = chance.word({ length: 5 })
+    cy.login(email, password, loginLink)
+    // cy.visit('/new/workspace')
+    cy.createWorkspace(newWorkspaceName)
+    cy.get('div.search > .ml-3').click()
+    cy.get('.sidebar > .middle > .item > .content').click()
+    cy.get('.sidebar > h3').should('not.contain', newWorkspaceName)
+    cy.signout()
+    cy.resetDb(reset)
+  })
 })

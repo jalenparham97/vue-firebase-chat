@@ -15,13 +15,13 @@ describe('Authentication Tests', () => {
     cy.visit('/')
   })
 
-  describe('Route Guards', () => {
+  context('Route Guards', () => {
     it('route gaurd to signup page', () => {
       cy.url().should('include', 'signup')
     })
   })
 
-  describe('Login / Signup Flow', () => {
+  context('Login / Signup Flow', () => {
     it('signs up a new user', () => {
       cy.signup(displayName, email, password)
       cy.contains('Create a new Workspace')
@@ -33,7 +33,7 @@ describe('Authentication Tests', () => {
     })
   })
 
-  describe('Error Handling', () => {
+  context('Error Handling', () => {
     it('should give required displayName error', () => {
       cy.signup('', email, password)
       cy.get(':nth-child(1) > span').should('be.visible')
